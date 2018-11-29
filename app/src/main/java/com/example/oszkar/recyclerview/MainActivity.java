@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mBlogList;
 
     private DatabaseReference mDatabase;
+
+    private RecyclerViewAdapter adapter;
     private String TAG = "Ez";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_dashboard:
-                   // mTextMessage.setText(R.string.title_dashboard);
+                    // mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
@@ -67,16 +69,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        mDatabase =FirebaseDatabase.getInstance().getReference("Data");
-
-        mBlogList = (RecyclerView) findViewById(R.id.myRecyclerView);
-        mBlogList.setHasFixedSize(true);
-        mBlogList.setLayoutManager(new LinearLayoutManager(this));
-
-
-        
-
-
+        mDatabase = FirebaseDatabase.getInstance().getReference("Data");
 
 
     }
@@ -91,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "itt");
                 //Blog post = dataSnapshot.getValue(Blog.class);
                 Log.d(TAG, dataSnapshot.getValue().toString());
-                collectPhoneNumbers((Map<String,Blog>) dataSnapshot.getValue());
+                collectPhoneNumbers((Map<String, Blog>) dataSnapshot.getValue());
             }
 
             @Override
@@ -103,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void collectPhoneNumbers(Map<String,Blog> value) {
+    private void collectPhoneNumbers(Map<String, Blog> value) {
 
         ArrayList<Blog> blogs = new ArrayList<>();
 
@@ -123,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        mBlogList = findViewById(R.id.recyclerView);
+
+        adapter = new RecyclerViewAdapter(this, blogs);
+
+        mBlogList.setAdapter(adapter);
+
+        mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
